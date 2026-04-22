@@ -1,0 +1,18 @@
+[phases.setup]
+nixPkgs = []
+
+[phases.install]
+cmds = [
+  "corepack enable",
+  "corepack prepare pnpm@latest --activate",
+  "pnpm install"
+]
+
+[phases.build]
+cmds = [
+  "sed -i 's/{ type: \"host\" }/{ type: \"host\", value: \".*\" }/g' next.config.mjs || true",
+  "pnpm build"
+]
+
+[start]
+cmd = "pnpm start"
