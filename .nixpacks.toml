@@ -10,7 +10,8 @@ cmds = [
 
 [phases.build]
 cmds = [
-  "sed -i 's/{ type: \"host\" }/{ type: \"host\", value: \".*\" }/g' next.config.mjs || true",
+  "if [ -f next.config.mjs ]; then sed -i 's/{[[:space:]]*type:[[:space:]]*\"host\"[[:space:]]*}/{ type: \"host\", value: \".*\" }/g' next.config.mjs; fi",
+  "if [ -f next.config.js ]; then sed -i 's/{[[:space:]]*type:[[:space:]]*\"host\"[[:space:]]*}/{ type: \"host\", value: \".*\" }/g' next.config.js; fi",
   "pnpm build"
 ]
 
