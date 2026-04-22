@@ -3,14 +3,32 @@ nixPkgs = []
 
 [phases.install]
 cmds = [
+  "echo '>> installing pnpm'",
   "npm install -g pnpm",
   "pnpm install"
 ]
 
 [phases.build]
 cmds = [
-  "if [ -f next.config.mjs ]; then sed -i 's/{[[:space:]]*type:[[:space:]]*\"host\"[[:space:]]*}/{ type: \"host\", value: \".*\" }/g' next.config.mjs; fi",
-  "if [ -f next.config.js ]; then sed -i 's/{[[:space:]]*type:[[:space:]]*\"host\"[[:space:]]*}/{ type: \"host\", value: \".*\" }/g' next.config.js; fi",
+  "echo '>> patching next.config (host fix)'",
+
+  # debug antes
+  "grep -R \"type: 'host'\\|type: \\\"host\\\"\" -n . || true",
+
+  # patch para .mjs
+  "if [ -f next.config.mjs ]; then sed -i \"s/type: 'host'/type: 'host', value: '.*'/g\" next.config.mjs; fi",
+  "if [ -f next.config.mjs ]; then sed -i 's/type: \"host\"/type: \"host\", value: \".*\"/g' next.config.mjs; fi",
+
+  # patch para .js
+  "if [ -f next.config.js ]; then sed -i \"s/type: 'host'/type: 'host', value: '.*'/g\" next.config.js; fi",
+  "if [ -f next.config.js ]; then sed -i 's/type: \"host\"/type: \"host\", value: \".*\"/g' next.config.js; fi",
+
+  # debug depois
+  "echo '>> after patch'",
+  "grep -R \"type: 'host'\\|type: \\\"host\\\"\" -n . || true",
+
+  # build
+  "echo '>> building app'",
   "pnpm build"
 ]
 
