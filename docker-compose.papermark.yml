@@ -118,6 +118,7 @@ services:
   # ==========================================================================
   papermark:
     image: ${PAPERMARK_IMAGE:-ghcr.io/avnox-com/papermark:latest}
+    platform: linux/amd64
     networks:
       - traefik_public
       - papermark_internal
